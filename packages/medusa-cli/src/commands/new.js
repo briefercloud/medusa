@@ -131,7 +131,7 @@ const install = async rootPath => {
 const ignored = path => !/^\.(git|hg)$/.test(sysPath.basename(path))
 
 // Copy starter from file system.
-const copy = async (starterPath, rootPath, skipInstall) => {
+const copy = async (starterPath, rootPath) => {
   // Chmod with 755.
   // 493 = parseInt('755', 8)
   await fs.ensureDir(rootPath, { mode: 493 })
@@ -160,15 +160,13 @@ const copy = async (starterPath, rootPath, skipInstall) => {
   reporter.success(copyActivity, `Created starter directory layout`)
   console.log() // Add some space
 
-  if (!skipInstall) {
-    await install(rootPath)
-  }
+  await install(rootPath)
 
   return true
 }
 
 // Clones starter from URI.
-const clone = async (hostInfo, rootPath, skipInstall) => {
+const clone = async (hostInfo, rootPath) => {
   let url
   // Let people use private repos accessed over SSH.
   if (hostInfo.getDefaultRepresentation() === `sshurl`) {
@@ -202,10 +200,7 @@ const clone = async (hostInfo, rootPath, skipInstall) => {
 
   await fs.remove(sysPath.join(rootPath, `.git`))
 
-  if (!skipInstall) {
-    await install(rootPath)
-  }
-
+  await install(rootPath)
   const isGit = await isAlreadyGitRepository()
   if (!isGit) await gitInit(rootPath)
   await maybeCreateGitIgnore(rootPath)
@@ -531,7 +526,6 @@ export const newStarter = async args => {
     skipDb,
     skipMigrations,
     skipEnv,
-    skipInstall,
     seed,
     useDefaults,
     dbUser,
@@ -612,9 +606,9 @@ medusa new ${rootPath} [url-to-starter]
 
   const hostedInfo = hostedGitInfo.fromUrl(starterPath)
   if (hostedInfo) {
-    await clone(hostedInfo, rootPath, skipInstall)
+    await clone(hostedInfo, rootPath)
   } else {
-    await copy(starterPath, rootPath, skipInstall)
+    await copy(starterPath, rootPath)
   }
 
   const medusaConfig = getMedusaConfig(rootPath)
