@@ -97,6 +97,11 @@ function buildLocalCommands(cli, isLocalProject) {
             describe: `If flag is set the command will not attempt to populate .env`,
             default: false,
           })
+          .option(`skip-install`, {
+            type: `boolean`,
+            describe: `If flag is set the command will not attempt to install dependencies`,
+            default: false,
+          })
           .option(`db-user`, {
             type: `string`,
             describe: `The database user to use for database setup and migrations.`,
