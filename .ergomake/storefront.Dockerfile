@@ -1,5 +1,7 @@
 FROM node:18 AS builder
 
+ARG NEXT_PUBLIC_MEDUSA_BACKEND_URL
+
 WORKDIR /medusa
 
 COPY package.json .
@@ -31,6 +33,7 @@ RUN grep -rl getStaticProps src/pages | xargs sed -i 's/getStaticProps/getServer
 RUN mv next.config.js original-next.config.js
 COPY .ergomake/next.config.js .
 RUN node /medusa/packages/medusa-dev-cli/dist/index.js -s
+ENV NEXT_PUBLIC_MEDUSA_BACKEND_URL $NEXT_PUBLIC_MEDUSA_BACKEND_URL
 RUN yarn build
 
 FROM node:18-alpine AS runner
