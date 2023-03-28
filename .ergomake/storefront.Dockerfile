@@ -44,7 +44,9 @@ RUN yarn global add wait-port
 
 WORKDIR /storefront
 
-COPY --from=builder /storefront .
+COPY --from=builder /storefront/node_modules .
+COPY --from=builder /storefront/.next .
+COPY --from=builder /storefront/package.json .
 
 ENV NEXT_PUBLIC_MEDUSA_BACKEND_URL $NEXT_PUBLIC_MEDUSA_BACKEND_URL
 
