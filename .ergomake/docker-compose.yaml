@@ -14,11 +14,15 @@ services:
     build:
       context: ../
       dockerfile: .ergomake/backend.Dockerfile
+      args:
+        STORE_CORS: http://backend:8000
     environment:
       DATABASE_URL: postgres://postgres:postgres@postgres/medusa
       REDIS_URL: redis://redis:6379
     ports:
       - "9000:9000"
+    labels:
+      dev.ergomake.preview.replace-arg.STORE_CORS: "https://{{ ergomake.previewUrls.storefront }}"
   postgres:
     image: postgres
     environment:

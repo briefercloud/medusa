@@ -24,11 +24,15 @@ RUN node /medusa/packages/medusa-dev-cli/dist/index.js -s
 
 FROM node:18-alpine AS runner
 
+ARG STORE_CORS
+
 RUN yarn global add wait-port
 
 WORKDIR /medusa-store
 
 COPY --from=builder /medusa-store .
+
+ENV STORE_CORS $STORE_CORS
 
 CMD sh -c 'wait-port postgres:5432 && \
            ./node_modules/.bin/medusa seed -f data/seed.json && \
