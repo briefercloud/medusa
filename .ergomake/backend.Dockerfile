@@ -19,6 +19,7 @@ ENV npm_config_user_agent=yarn
 
 RUN node /medusa/packages/medusa-cli/dist/index.js new medusa-store
 WORKDIR medusa-store
+RUN mv medusa-config.js original-medusa-config.js
 COPY .ergomake/medusa-config.js .
 RUN node /medusa/packages/medusa-dev-cli/dist/index.js -s
 
@@ -35,6 +36,6 @@ COPY --from=builder /medusa-store .
 ENV STORE_CORS $STORE_CORS
 
 CMD sh -c 'wait-port postgres:5432 && \
-           ./node_modules/.bin/medusa seed -f data/seed.json && \
+           ./node_modules/.bin/medusa seed -f data/seed.json; \
            ./node_modules/.bin/medusa start'
 

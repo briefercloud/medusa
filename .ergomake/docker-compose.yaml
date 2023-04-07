@@ -5,7 +5,7 @@ services:
       context: ../
       dockerfile: .ergomake/storefront.Dockerfile
       args:
-        NEXT_PUBLIC_MEDUSA_BACKEND_URL: http://backend:9000
+        NEXT_PUBLIC_MEDUSA_BACKEND_URL: http://localhost:9000
     ports:
       - "8000:8000"
     labels:
@@ -15,7 +15,7 @@ services:
       context: ../
       dockerfile: .ergomake/backend.Dockerfile
       args:
-        STORE_CORS: http://backend:8000
+        STORE_CORS: http://localhost:8000
     environment:
       DATABASE_URL: postgres://postgres:postgres@postgres/medusa
       REDIS_URL: redis://redis:6379
